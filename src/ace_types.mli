@@ -121,7 +121,8 @@ and ['a] commandManager = object
 end
 
 class type ace = object
-  method edit: 'a. Dom_html.element Js.t -> 'a editor Js.t Js.meth
+  method edit : 'a. Dom_html.element Js.t -> 'a editor Js.t Js.meth
+  method require : Js.js_string Js.t -> 'b Js.meth
 end
 
 class type keybinding_menu = object

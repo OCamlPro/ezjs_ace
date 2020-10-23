@@ -28,9 +28,9 @@ type 'a editor =
   ; mutable marks: int list
   ; mutable keybinding_menu: bool }
 
-let ace : Ace_types.ace Js.t = Js.Unsafe.variable "ace"
+let ace () : Ace_types.ace Js.t = Js.Unsafe.variable "ace"
 
-let edit el = ace##edit el
+let edit el = (ace ())##edit el
 
 let create_position r c =
   let pos : position Js.t = Js.Unsafe.obj [||] in
@@ -108,13 +108,12 @@ let string_of_make_type = function
   | Message ->
       "info"
 
-let require s = (Js.Unsafe.variable "ace") ## (require (Js.string s))
+let require s = (ace ())##require (Js.string s)
 
 type range = Ace_types.range Js.t
 
-let range_cstr = (require "ace/range")##._Range
-
 let range sr sc er ec : range =
+  let range_cstr = (require "ace/range")##._Range in
   Js.Unsafe.new_obj range_cstr
     [| Js.Unsafe.inject sr
      ; Js.Unsafe.inject sc
