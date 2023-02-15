@@ -28,7 +28,7 @@ type 'a editor =
   ; mutable marks: int list
   ; mutable keybinding_menu: bool }
 
-let ace () : Ace_types.ace Js.t = Js.Unsafe.variable "ace"
+let ace () : Ace_types.ace Js.t = Js.Unsafe.pure_js_expr "ace"
 
 let edit el = (ace ())##edit el
 
@@ -78,7 +78,7 @@ let get_line e line =
 
 let create_editor editor_div =
   let editor = edit editor_div in
-  Js.Unsafe.set editor "$blockScrolling" (Js.Unsafe.variable "Infinity") ;
+  Js.Unsafe.set editor "$blockScrolling" (Js.Unsafe.pure_js_expr "Infinity") ;
   let data = {editor; editor_div; marks= []; keybinding_menu= false} in
   editor##.customData := (data, None) ;
   data
@@ -260,7 +260,7 @@ let define_mode name helpers =
   | Some auto_outdent ->
       js_helpers##.autoOutdent := Js.wrap_callback auto_outdent ) ;
   Js.Unsafe.fun_call
-    (Js.Unsafe.variable "define_ocaml_mode")
+    (Js.Unsafe.pure_js_expr "define_ocaml_mode")
     [| Js.Unsafe.inject (Js.string ("ace/mode/" ^ name))
      ; Js.Unsafe.inject js_helpers |]
 
